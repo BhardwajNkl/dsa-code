@@ -1,23 +1,19 @@
 package dev.bhardwaj.dsa.ds.linked_list;
 
-public class SinglyLL {
+public class DoublyLL {
 	private class Node{
 		public int data;
 		public Node next;
+		public Node prev;
 		public Node(int data) {
 			this.data = data;
 		}
 	}	
 	
-	
 	private Node head;
 	private int size;
 	
-	public Node getHead() {
-		return head;
-	}
-	
-	public SinglyLL() {
+	public DoublyLL() {
 		head=null;
 		size =0;
 	}
@@ -31,8 +27,8 @@ public class SinglyLL {
 		
 		Node newNode = new Node(data);
 		
+		head.prev = newNode;
 		newNode.next = head;
-		
 		head = newNode;
 		
 		size++;
@@ -40,6 +36,7 @@ public class SinglyLL {
 	
 	public void addLast(int data) {
 		Node newNode = new Node(data);
+		
 		if(head==null) {
 			head = newNode;
 			size++;
@@ -53,6 +50,8 @@ public class SinglyLL {
 		}
 		
 		temp.next = newNode;
+		newNode.prev = temp;
+		
 		size++;
 	}
 	
@@ -74,13 +73,17 @@ public class SinglyLL {
 		// to add at index i means, get i-1th node then add new node next to it.
 		Node temp = head;
 		int i=0; // indicating that currently on 0th node that is head.
-		while(i<index-1) { // when exit, i will be index-1
+		while(i<index-1) { // when exit, i will be index-1 and temp will be right here.
 			temp = temp.next;
 			i++;
 		}
 		
 		Node newNode = new Node(data);
+		
 		newNode.next = temp.next;
+		temp.next.prev = newNode;
+		newNode.prev = temp;
+		
 		temp.next = newNode;
 		
 		size++;
@@ -93,6 +96,8 @@ public class SinglyLL {
 		}
 		
 		head = head.next;
+		head.prev = null;
+		
 		size--;
 	}
 	
@@ -128,54 +133,6 @@ public void deleteLast() {
 	
 	public int size() {
 		return size;
-	}
-	
-	
-	// insurt using recursion: FROM QUESTIONS VIDEO
-	public void insertRec(int data, int index){
-		// logic: base: index = 0, create new node, new node next = current, prev.next=new node.
-			// else: call(index--, prev=current, current = next)
-		insertRecHelper(null, data, index);
-	}
-	
-	// insurt using recursion helper: FROM QUESTIONS VIDEO
-	private void insertRecHelper(Node prev, int data, int index) {
-		if(index == 0) {
-			Node newNode = new Node(data);
-			if(prev==null) {
-				newNode.next = head.next;
-				head = newNode;
-			} else {
-				newNode.next = prev.next;
-				prev.next = newNode;
-			}
-			return;
-		}
-		
-		if(prev==null)
-		insertRecHelper(head, data, index-1);
-		else
-		insertRecHelper(prev.next, data, index-1);
-
-	}
-	
-	
-	// from problem's video
-	public void reverse() {
-		Node prev = null;
-		Node current = head;
-		Node next = null;
-	
-		while(current != null) {
-			next = current.next;
-			current.next = prev;
-			prev = current;
-			current = next;
-		}
-		
-		// finally head should be at prev
-		head = prev;
-		
 	}
 	
 	
